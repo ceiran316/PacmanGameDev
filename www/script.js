@@ -25,7 +25,7 @@ let game = new Phaser.Game(config);
 
 function preload() {
     this.load.image('tiles', 'assets/tilesets/colours.png');
-    this.load.tilemapTiledJSON('map', 'map.json');
+    this.load.tilemapTiledJSON('map', 'assets/tilemaps/map.json');
     //this.load.spritesheet('pacman', 'assets/sprites/pacman.png', { frameWidth: 96, frameHeight: 96 });
 }
 
