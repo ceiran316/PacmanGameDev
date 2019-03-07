@@ -4,8 +4,8 @@ let gameScene = new Phaser.Scene('Game');
 // our game's configuration
 let config = {
     type: Phaser.AUTO,  //Phaser will decide how to render our game (WebGL or Canvas)
-    width: 667, // game width
-    height: 732,
+    width: 626,
+    height: 686,
     physics: {
         default: 'arcade',
         arcade: {
@@ -24,13 +24,13 @@ let config = {
 let game = new Phaser.Game(config);
 
 function preload() {
-    this.load.image('tiles', 'assets/tilesets/colours.png');
-    this.load.tilemapTiledJSON('map', 'assets/tilemaps/map.json');
+    this.load.image('tiles', '/assets/tilesets/colours.png');
+    this.load.tilemapTiledJSON('map', '/assets/tilemaps/pacmap2.json');
     //this.load.spritesheet('pacman', 'assets/sprites/pacman.png', { frameWidth: 96, frameHeight: 96 });
 }
 
 function create() {
-    const map = this.make.tilemap({key:"map", tileWidth : 104, tileHeight: 114});
+    const map = this.make.tilemap({key:"map", tileWidth : 25, tileHeight: 25});
     const tileset = map.addTilesetImage('colours', 'tiles');
 
     const background = map.createDynamicLayer('background', tileset, 0, 0);
