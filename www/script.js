@@ -2,7 +2,7 @@
 let config = {
     type: Phaser.AUTO,
     parent: 'content',
-    width: 744,
+    width: 755,
     height: 686,
     physics: {
         default: 'arcade',
@@ -23,9 +23,12 @@ let game = new Phaser.Game(config);
 let score = 0;
 let scoreText;
 let pellets;
+let gameText;
 let superPellets;
 let startLives = 3;
 let livesText;
+let level = 1;
+let levelText;
 let isGameOver = false;
 
 var graphics;
@@ -40,7 +43,8 @@ var lives = startLives
 function preload() {
     this.load.image('tiles', '/assets/tilesets/colours.png');
     this.load.tilemapTiledJSON('map', '/assets/tilemaps/pacmap2.json');
-    this.load.audio('chomp', '/assets/audio/pacmanChomp.mp3');
+    this.load.audio('chomp', '/assets/audio/pacman_chomp.wav');
+    this.load.audio('super', '/assets/audio/pacman_eatfruit.wav');
     
     //this.load.atlas('sprites', '/assets/sprites/ghost1/png', '/assets/tilemaps/pacmap2.json');
 
@@ -159,8 +163,6 @@ function create() {
     this.data.set('level', 1);
     this.data.set('High Score', 2000);
 
-    scoreText = this.add.text(630, 321, 'Score: 0', {  FontSize: '80px', fill: '#ffffff'} );
-    scoreText.fixedToCamera = true;
     var graphics = this.add.graphics();    
     // the path for our enemies
     // parameters are the start x and y of our path
@@ -327,13 +329,13 @@ function create() {
    // game.physics.arcade.collide(enemies);   
     
     // player
-    this.player = this.physics.add.sprite(335, 513, 'player');
+    this.player = this.physics.add.sprite(411, 381, 'player');
     this.player.setCollideWorldBounds(true);
     // set the boundaries of our game world
     this.physics.world.bounds.width = walls.width;
     this.physics.world.bounds.height = walls.height;
     this.player.body.allowGravity = false;
-    this.player.setScale(1.6);
+    this.player.setScale(1.5);
     this.anims.create({
       key: 'left',
       frames: this.anims.generateFrameNumbers('player', {
@@ -389,7 +391,7 @@ function create() {
   
     
     //ghosts
-    this.enemy = this.physics.add.sprite('enemy');
+    this.enemy = this.physics.add.sprite('enemyR');
     //enemy.setCollideWorldBounds(true);
     this.enemy.setScale(2);
     this.anims.create({
@@ -432,16 +434,42 @@ function create() {
     //enemy3 = this.add.sprite(303.5, 340, 'enemy3');
     //enemy4 = this.add.sprite(303.5, 340, 'enemy4');
     
-    
+    //this.textOutPut();
+
+    //gameText = this.add.text(630, 20, 'PACMAN', {  font: '30px Showcard Gothic', fill: '#fff42d'} );
+    //levelText = this.add.text(630, 80, 'LEVEL:\n1', {  font: '30px Showcard Gothic', fill: '#fff42d'} );
+    //scoreText = this.add.text(630, 160, 'SCORE:\n0', {  font: '30px Showcard Gothic', fill: '#fff42d'} );
+    //livesText = this.add.text(630, 240, 'LIVES:\n0', {  font: '30px Showcard Gothic', fill: '#fff42d'} );
+
+    gameText = this.add.text(630, 0, 'P\n A\n  C\n   M\n     A\n      N', {  font: '60px Showcard Gothic', fill: '#fff42d'} );
+    levelText = this.add.text(630, 407, 'LEVEL:\n1', {  font: '30px Showcard Gothic', fill: '#fff42d'} );
+    scoreText = this.add.text(630, 487, 'SCORE:\n0', {  font: '30px Showcard Gothic', fill: '#fff42d'} );
+    livesText = this.add.text(630, 567, 'LIVES:\n3', {  font: '30px Showcard Gothic', fill: '#fff42d'} );
+
+
     
     cursors = this.input.keyboard.createCursorKeys();
 
 }
 
+/*function textOutPut(){
+    this.createText(630,321, 'Level: 0');
+    this.createText(630,381, 'Score: 0');
+    this.createText(630,441, 'Lives: 0');
+}
+
+function createText(x,y, text) {
+    return this.game.add.text(
+        x , y, text, { font: 'g',  FontSize: '80px', fill: '#ffffff'});
+    
+}*/
+
+
+
 function collectPellets(sprite, tile) {
     pellets.removeTileAt(tile.x, tile.y); // remove the tile/coin
     score += 10;
-    scoreText.setText('Score: ' + score);
+    scoreText.setText('SCORE:\n' + score);
     let chomping = this.sound.add('chomp');
     chomping.play();
     //return false;
@@ -452,8 +480,8 @@ function collectSuperPellets(sprite, tile) {
     superPellets.removeTileAt(tile.x, tile.y); // remove the tile/coin
 
     score += 50;
-    scoreText.setText('Score: ' + score);
-    let chomping = this.sound.add('chomp');
+    scoreText.setText('SCORE:\n' + score);
+    let chomping = this.sound.add('super');
     chomping.play();
 }
   
@@ -473,6 +501,7 @@ function update(time, delta) {
             this.nextEnemy = time + 25302;
         }       
     }
+
 
     // check for game over
     if (isGameOver)
